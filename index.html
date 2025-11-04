@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CyberAware — jednoduchý průvodce kyberbezpečností</title>
+  <meta name="description" content="Přehled kybernetických hrozeb pro běžné uživatele: malware, phishing, ransomware, formjacking a další. Praktická doporučení." />
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,#071022 0%, #071122 60%);color:#e6eef6;line-height:1.45}
+    header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021028}
+    .title{font-size:18px;font-weight:600}
+    nav a{color:var(--muted);text-decoration:none;margin-left:14px}
+    nav a.active{color:var(--accent);font-weight:600}
+    main{max-width:1100px;margin:28px auto;padding:0 18px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.02)}
+    .intro{grid-column:span 12;display:flex;gap:18px;align-items:center}
+    .intro .left{flex:1}
+    .intro h1{margin:0 0 8px;font-size:26px}
+    .intro p{margin:0;color:var(--muted)}
+    .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .pill{background:var(--glass);padding:8px 12px;border-radius:999px;color:var(--muted);font-weight:600;border:1px solid rgba(255,255,255,0.02);cursor:pointer}
+    .pill:hover{color:var(--accent)}
+    .search{display:flex;gap:8px;align-items:center}
+    input.searchbox{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 12px;border-radius:8px;color:inherit;width:280px}
+    .thumbs{grid-column:span 12;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .thumb{padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));cursor:pointer}
+    .thumb h3{margin:0 0 6px;font-size:16px}
+    .thumb p{margin:0;color:var(--muted);font-size:13px}
+    .content{grid-column:span 12}
+    .backlink{display:inline-block;margin-bottom:12px;color:var(--muted);cursor:pointer}
+    .slug{font-size:12px;color:var(--muted);margin-bottom:10px}
+    .section{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:14px;border-radius:10px;margin-bottom:12px}
+    .section h4{margin:0 0 6px}
+    .accordion{border-radius:8px;overflow:hidden}
+    .acc-head{display:flex;align-items:center;justify-content:space-between;padding:12px;cursor:pointer}
+    .acc-body{padding:12px;border-top:1px solid rgba(255,255,255,0.02);display:none;background:rgba(0,0,0,0.03)}
+    footer{max-width:1100px;margin:20px auto 60px;padding:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media (max-width:800px){.intro{flex-direction:column;align-items:flex-start}.brand .title{display:none}}
+    .copy-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+    .badge{display:inline-block;background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">CA</div>
+      <div>
+        <div class="title">CyberAware</div>
+        <div style="font-size:12px;color:var(--muted)">Jednoduchý průvodce kybernetickou bezpečností</div>
+      </div>
+    </div>
+    <nav>
+      <a href="/" data-link>Home</a>
+      <a href="/topics" data-link>Seznam hrozeb</a>
+      <a href="/compare/phishing-vs-formjacking" data-link>Phishing vs Formjacking</a>
+    </nav>
+  </header>
+  <main>
+    <div class="grid">
+      <section id="app" class="card intro" aria-live="polite">
+        <!-- SPA content injected here -->
+      </section>
+    </div>
+  </main>
+  <footer>Vytvořeno jako jednoduchý přehled — použijte to jako vzdělávací materiál. Pokud chcete změny, napište mi.</footer>
+
+  <script>
+    // --- Data: jednoduché, srozumitelné popisy v češtině ---
+    const THREATS = [
+      {id:'malware', title:'Malware', slug:'/malware', short:'Obecný termín pro škodlivý software (viry, trojské koně, spyware...).', content:`<div class="section"><h4>Co to je</h4><p>Malware je jakýkoliv škodlivý program, jehož cílem je poškodit zařízení, ukrást data nebo získat kontrolu nad systémem.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Dostane se do počítače přes stažení souboru, e-mailovou přílohu nebo zranitelnou stránku. Po spuštění se může skrýt, odesílat data nebo otevírat zadní vrátka.</p></div>
+      <div class="section"><h4>Příklady</h4><p>Viry, červi, trojské koně, spyware, adware, rootkity, ransomwarové rodiny.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Zpomalení zařízení, neznámé programy, vyskakovací okna, nečekané změny v prohlížeči nebo velká spotřeba dat.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Aktualizovat OS a programy, používat antivir, nestahovat z neznámých zdrojů, zálohovat data.</p></div>`},
+
+      {id:'ransomware', title:'Ransomware', slug:'/ransomware', short:'Škodný program, který zašifruje soubory a požaduje výkupné.', content:`<div class="section"><h4>Co to je</h4><p>Ransomware zašifruje vaše soubory a požaduje platbu za jejich dešifrování.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Šíří se přes falešné e-maily, stažené soubory nebo zranitelnosti. Po spuštění zašifruje data a vyžaduje výkupné (často v kryptoměně).</p></div>
+      <div class="section"><h4>Příklady</h4><p>Rodiny jako WannaCry, LockBit nebo REvil.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Zpráva s požadavkem na zaplacení, nemožnost otevřít soubory, změněné přípony.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Pravidelné zálohy, aktualizace, neotevírat podezřelé přílohy. Pokud jste napadeni, neplaťte automaticky výkupné — kontaktujte odborníky a policii.</p></div>`},
+
+      {id:'phishing', title:'Phishing', slug:'/phishing', short:'Podvodné zprávy/weby snažící se získat vaše hesla nebo čísla karet.', content:`<div class="section"><h4>Co to je</h4><p>Podvodná zpráva nebo web, který se vydává za důvěryhodnou službu, aby získal vaše citlivé údaje.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Dostanete e-mail nebo SMS s odkazem a naléhavou výzvou (např. "ověřte svůj účet"). Odkaz vede na falešnou stránku, kde zadáte své údaje.</p></div>
+      <div class="section"><h4>Příklady</h4><p>E-maily údajně od banky, falešné faktury, zprávy od "doručovací služby".</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Naléhavost, chyby v textu, nesprávná URL, obecné oslovení („zákazníku“). Kontrolujte odkazy před kliknutím.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Nikdy nezadávejte citlivé údaje po kliknutí v e-mailu — otevřete oficiální web ručně. Zapněte dvoufaktorové ověřování (raději aplikaci než SMS).</p></div>`},
+
+      {id:'formjacking', title:'Formjacking', slug:'/formjacking', short:'Krádež dat přímo z formulářů na legitímních webech.', content:`<div class="section"><h4>Co to je</h4><p>Útok, kdy se do platebního nebo kontaktního formuláře webu vloží škodlivý skript, který odesílá zadané údaje útočníkům.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Útočník napadne web nebo plugin a přidá JavaScript, který kopíruje vstup z formuláře a posílá ho mimo stránku.</p></div>
+      <div class="section"><h4>Příklady</h4><p>Útoky skupin jako Magecart na velké e-shopy a služby.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Pro uživatele bývá útok nenápadný — zjistíte ho až podle podvodných plateb. Provozovatel webu musí sledovat změny v kódu.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Platba přes ověřené brány (PayPal, Google Pay), kontrola bankovních výpisů, provozovatelé a vývojáři by měli kontrolovat externí skripty a aktualizovat pluginy.</p></div>`},
+
+      {id:'scareware', title:'Scareware', slug:'/scareware', short:'Falešná varování a "technická podpora" snažící se o podvod.', content:`<div class="section"><h4>Co to je</h4><p>Podvod, který vás straší falešnými hláškami o infekci, aby vás donutil stáhnout placený "antivirus" nebo poskytnout vzdálený přístup.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Vyskakovací okna v prohlížeči nebo telefonát, který předstírá, že je od technické podpory — cílem je získat peníze nebo vzdálený přístup.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Agresivní upozornění, nevyžádané volání, žádost o platbu nebo vzdálený přístup — legitimní bezpečnostní software to nedělá tímto způsobem.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Zavřít okno, neinstalovat programy z hlášení, neumožňovat vzdálený přístup neznámým osobám, ověřit si informaci oficiálně.</p></div>`},
+
+      {id:'keylogger', title:'Keylogger', slug:'/keylogger', short:'Špionážní software, který zaznamenává stisky kláves.', content:`<div class="section"><h4>Co to je</h4><p>Program (nebo zařízení), který zaznamenává, co na klávesnici píšete — hesla, zprávy, čísla karet.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Keylogger běží na pozadí a posílá záznamy útočníkovi. Může být součástí trojského koně nebo fyzické čtečky mezi klávesnicí a PC.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Pomalejší reakce systému, podezřelé procesy, neočekávané odesílání dat. Často je těžké ho bez specializovaného nástroje rozpoznat.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Antivir s detekcí spyware, pravidelná kontrola nainstalovaných programů, nepoužívat veřejné/nejisté počítače k přihlášení k citlivým účtům.</p></div>`},
+
+      {id:'adware', title:'Adware', slug:'/adware', short:'Nechtěné reklamy a sledování uživatele.', content:`<div class="section"><h4>Co to je</h4><p>Program zobrazující nechtěné reklamy a často sledující chování uživatele za účelem cílení reklam.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Velké množství vyskakovacích oken, přesměrování v prohlížeči, nové panely či změna domovské stránky.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Odinstalovat podezřelé rozšíření, použít adblocker, kontrolovat instalované aplikace a stahovat jen z důvěryhodných zdrojů.</p></div>`},
+
+      {id:'typosquatting', title:'Typosquatting', slug:'/typosquatting', short:'Překlepové domény lákající na falešné stránky.', content:`<div class="section"><h4>Co to je</h4><p>Útočníci registrují domény s překlepy známých webů a tím lákají návštěvníky na falešné stránky.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Zkontrolujte URL, chybná nebo podezřelá doména je hlavní varování. Raději používejte záložky nebo oficiální odkazy.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Používat záložky, bezpečnostní pluginy v prohlížeči a kontrolovat certifikát HTTPS.</p></div>`},
+
+      {id:'rootkit', title:'Rootkit', slug:'/rootkit', short:'Skrytí malwaru hluboko v systému.', content:`<div class="section"><h4>Co to je</h4><p>Rootkit skryje přítomnost malwaru a dává útočníkům trvalý a skrytý přístup k systému.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Neobvyklé chování, nemožnost spustit bezpečnostní nástroje, skryté procesy.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Pravidelné aktualizace, použití antimalware nástrojů, v krajním případě čistá instalace systému.</p></div>`},
+
+      {id:'sim-swap', title:'SIM swapping', slug:'/sim-swap', short:'Převzetí vašeho telefonního čísla podvodem.', content:`<div class="section"><h4>Co to je</h4><p>Útočník přiměje operátora, aby číslo převedl na jeho SIM, a tím získá SMS kódy a hovory.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Náhlá ztráta signálu, neobvyklé notifikace o přihlášení do služeb.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Nastavit u operátora extra PIN pro převod SIM, preferovat 2FA z aplikací místo SMS.</p></div>`},
+
+      {id:'cryptojacking', title:'Cryptojacking', slug:'/cryptojacking', short:'Těžba kryptoměn na vašem zařízení bez svolení.', content:`<div class="section"><h4>Co to je</h4><p>Útočník využívá výkon vašeho zařízení k těžbě kryptoměny bez vašeho vědomí.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Zvýšené zahřívání, hlučný ventilátor, pomalý systém a vyšší spotřeba energie.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Blokovat podezřelé skripty (rozšíření do prohlížeče), aktualizovat prohlížeč a nepoužívat neznámé weby.</p></div>`},
+
+      {id:'mitm', title:'Man-in-the-Middle (MITM)', slug:'/mitm', short:'Útočník odposlouchává komunikaci mezi vámi a serverem.', content:`<div class="section"><h4>Co to je</h4><p>Útočník zprostředkuje komunikaci mezi dvěma stranami a může číst nebo měnit přenášená data.</p></div>
+      <div class="section"><h4>Jak funguje</h4><p>Útočník může vytvořit falešnou Wi‑Fi síť nebo zneužít nezabezpečené spojení a nasát data mezi vámi a webem.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Vyhýbejte se veřejným Wi‑Fi pro citlivé operace, používejte VPN, kontrolujte HTTPS a certifikáty stránek.</p></div>`},
+
+      {id:'ddos', title:'DDoS', slug:'/ddos', short:'Přetížení služby velkým množstvím požadavků.', content:`<div class="section"><h4>Co to je</h4><p>Útok, kdy mnoho zařízení najednou bombarduje server požadavky a služba přestane fungovat.</p></div>
+      <div class="section"><h4>Jak poznat</h4><p>Web nebo služba dlouhodobě nedostupná nebo velmi pomalá.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Provozovatelé používají DDoS ochranu (CDN, rate limiting). Jako uživatel čekat a informovat správce služby.</p></div>`},
+
+      {id:'supply-chain', title:'Supply‑chain attack', slug:'/supply-chain', short:'Útok přes kompromitovaného dodavatele / plugin.', content:`<div class="section"><h4>Co to je</h4><p>Útok, kdy se škodlivý kód dostane k vám skrze kompromitovaného dodavatele softwaru, plugin nebo knihovnu.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Instalovat jen důvěryhodné aktualizace, kontrolovat repozitáře, používat podpisy aktualizací a audity závislostí.</p></div>`},
+
+      {id:'watering-hole', title:'Watering‑hole', slug:'/watering-hole', short:'Napadení populární stránky navštěvované cílovou skupinou.', content:`<div class="section"><h4>Co to je</h4><p>Útočník napadne web, o který se zajímá určitá skupina uživatelů (např. zaměstnanci firmy). Když cíle web navštíví, může být nakazí.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Udržovat prohlížeč a pluginy aktuální, neotevírat podezřelé odkazy, používat bezpečnostní rozšíření.</p></div>`},
+
+      {id:'insider', title:'Insider threat', slug:'/insider', short:'Hrozba zevnitř organizace (zaměstnanec).', content:`<div class="section"><h4>Co to je</h4><p>Zaměstnanec nebo spolupracovník, který zneužije přístup k datům — úmyslně nebo omylem.</p></div>
+      <div class="section"><h4>Jak se bránit</h4><p>Bezpečnostní politiky, přístupová práva, školení zaměstnanců a monitorování podezřelých aktivit.</p></div>`}
+    ];
+
+    // --- Router & rendering ---
+    function el(tag,attrs={},html=''){const e=document.createElement(tag);for(const k in attrs){if(k==='class')e.className=attrs[k];else if(k.startsWith('data-'))e.setAttribute(k,attrs[k]);else e[k]=attrs[k]}e.innerHTML=html;return e}
+
+    function homeView(){
+      const app = document.getElementById('app');
+      app.innerHTML = '';
+      const left = el('div',{class:'left'});
+      left.appendChild(el('h1',{},'CyberAware — přehled kybernetických hrozeb'));
+      left.appendChild(el('p',{},'Jednoduché a srozumitelné vysvětlení různých útoků a návod, jak se před nimi bránit. Klikni na kartu pro více informací nebo použij vyhledávání.'));
+
+      const searchWrap = el('div',{class:'search'});
+      const input = el('input',{class:'searchbox',placeholder:'Hledej hrozbu (např. ransomware, phishing)...'});
+      input.addEventListener('input',()=>renderThumbs(input.value));
+      searchWrap.appendChild(input);
+      left.appendChild(searchWrap);
+
+      const right = el('div',{style:'width:180px;text-align:right'});
+      right.appendChild(el('div',{class:'badge'},'Bezpečnost pro každého'));
+
+      const links = el('div',{class:'links'});
+      THREATS.slice(0,8).forEach(t=>{
+        const a = el('button',{class:'pill',onclick:`navigate('${t.slug}')`},t.title);
+        links.appendChild(a);
+      });
+
+      left.appendChild(links);
+
+      const container = el('div',{style:'display:flex;gap:18px;width:100%'});
+      container.appendChild(left);
+      container.appendChild(right);
+
+      app.appendChild(container);
+
+      const thumbs = el('div',{class:'thumbs',style:'margin-top:18px'});
+      app.appendChild(thumbs);
+
+      function renderThumbs(filter=''){
+        thumbs.innerHTML='';
+        THREATS.filter(t=>t.title.toLowerCase().includes(filter.toLowerCase())||t.short.toLowerCase().includes(filter.toLowerCase())).forEach(t=>{
+          const card = el('div',{class:'thumb',onclick:`navigate('${t.slug}')`});
+          card.appendChild(el('h3',{},t.title));
+          card.appendChild(el('p',{},t.short));
+          thumbs.appendChild(card);
+        });
+        if(thumbs.children.length===0) thumbs.appendChild(el('div',{},'Nic nenalezeno'));
+      }
+
+      renderThumbs('');
+    }
+
+    function topicView(slug){
+      const t = THREATS.find(x=>x.slug===slug||('/'+x.id)===slug||x.id===slug.replace('/',''));
+      const app = document.getElementById('app');
+      if(!t){app.innerHTML = '<div class="card"><p>Hrozba nenalezena.</p></div>';return}
+      app.innerHTML='';
+      const back = el('div',{class:'backlink',onclick:"navigate('/')"},'← Zpět');
+      app.appendChild(back);
+      app.appendChild(el('div',{class:'slug'},'URL: <span style="color:var(--accent)">'+t.slug+'</span>'));
+      app.appendChild(el('h2',{},t.title));
+      app.appendChild(el('p',{},t.short));
+
+      const copy = el('button',{class:'copy-btn',onclick:`copyUrl('${t.slug}')`},'Zkopírovat odkaz');
+      app.appendChild(copy);
+
+      const wrapper = el('div',{class:'content'});
+      wrapper.innerHTML = t.content;
+      app.appendChild(wrapper);
+
+      // Add small FAQ accordion: jak poznat / co dělat
+      // (content already contains sections)
+    }
+
+    function compareView(){
+      const app=document.getElementById('app');
+      app.innerHTML='';
+      app.appendChild(el('div',{class:'backlink',onclick:"navigate('/')"},'← Zpět'));
+      app.appendChild(el('h2',{},'Phishing vs Formjacking — rozdíl vysvětlený jednoduše'));
+      app.appendChild(el('div',{class:'section'},`<h4>Phishing</h4><p>Útočník se tě snaží obelstít — pošle ti e-mail/ SMS nebo odkaz na falešný web, kde zadáš svá data sám.</p>`));
+      app.appendChild(el('div',{class:'section'},`<h4>Formjacking</h4><p>Útočník napadne skutečný web (např. e-shop) a skriptem ukradne data z formuláře, které tam zadáš — stránka vypadá normálně, ale není bezpečná.</p>`));
+      app.appendChild(el('div',{class:'section'},`<h4>Jednoduché shrnutí</h4><p>Phishing = oklamou tě, aby ses sám nachytal. Formjacking = napadnou web, kterému důvěřuješ, a ukradnou data přímo z něj.</p>`));
+    }
+
+    function navigate(path){
+      history.pushState({},'',path);
+      router();
+    }
+
+    function copyUrl(slug){
+      const full = location.origin + slug;
+      navigator.clipboard.writeText(full).then(()=>alert('Odkaz zkopírován: '+full));
+    }
+
+    function router(){
+      const path = location.pathname || '/';
+      // handle root
+      if(path==='/'||path==='/index.html'){homeView();setActiveNav('/');return}
+      // compare route
+      if(path.startsWith('/compare')){compareView();setActiveNav('/compare/phishing-vs-formjacking');return}
+      // topics list
+      if(path==='/topics'){homeView();setActiveNav('/topics');return}
+      // topic pages like /malware
+      const matched = THREATS.find(t=>t.slug===path||('/'+t.id)===path);
+      if(matched){topicView(matched.slug);setActiveNav(matched.slug);return}
+      // fallback to home
+      homeView();setActiveNav('/');
+    }
+
+    function setActiveNav(path){
+      document.querySelectorAll('nav a').forEach(a=>{const href = a.getAttribute('href'); if(href===path) a.classList.add('active'); else a.classList.remove('active')});
+    }
+
+    window.addEventListener('popstate',router);
+    // initial render
+    document.addEventListener('DOMContentLoaded',()=>{
+      // attach <a data-link> to SPA navigation
+      document.querySelectorAll('a[data-link]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();navigate(a.getAttribute('href'))})});
+      // if server doesn't support history API rewrites, allow hash fallback
+      if(location.hash && location.hash.length>1){history.replaceState({},'',location.hash.slice(1));}
+      router();
+    });
+
+    // small UX: handle clicks from dynamically created elements
+    document.body.addEventListener('click',e=>{
+      const on = e.target.getAttribute('onclick');
+      if(on && on.startsWith('navigate(')){
+        e.preventDefault();
+        const arg = on.match(/navigate\('(.+?)'\)/);
+        if(arg) navigate(arg[1]);
+      }
+    });
+  </script>
+</body>
+</html>
